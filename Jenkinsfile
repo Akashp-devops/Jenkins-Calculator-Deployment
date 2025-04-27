@@ -4,6 +4,7 @@ pipeline {
     environment {
         APP_NAME = 'calculator-app'
         DEPLOY_DIR = '/var/www/html/calculator'
+        SERVER = 'ubuntu@13.61.187.188'  // Updated with your server's IP and username
     }
 
     stages {
@@ -36,7 +37,7 @@ pipeline {
                 script {
                     // Deployment steps (SCP, SSH, or any other deployment method)
                     echo "Deploying ${APP_NAME} to ${DEPLOY_DIR}"
-                    sh 'scp -r ./* user@yourserver:/var/www/html/calculator/'
+                    sh 'scp -r ./* ubuntu@13.61.187.188:/var/www/html/calculator/'  // Updated with correct server IP and username
                 }
             }
         }
