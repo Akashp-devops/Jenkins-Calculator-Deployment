@@ -1,26 +1,65 @@
 pipeline {
     agent any
 
+    environment {
+        APP_NAME = 'calculator-app'
+        DEPLOY_DIR = '/var/www/html/calculator'
+    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git url: 'https://github.com/<your-username>/Jenkins-Calculator-Deployment.git', branch: 'main'
+                git 'https://github.com/Akashp-devops/Jenkins-Calculator-Deployment.git'
             }
         }
 
-        stage('Deploy to Apache') {
+        stage('Build') {
             steps {
-                sh 'sudo cp -r * /var/www/html/'
+                script {
+                    // Add any build steps here, if applicable
+                    echo 'Building the app...'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    // Add your test scripts or steps here
+                    echo 'Running tests...'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Deployment steps (SCP, SSH, or any other deployment method)
+                    echo "Deploying ${APP_NAME} to ${DEPLOY_DIR}"
+                    sh 'scp -r ./* user@yourserver:/var/www/html/calculator/'
+                }
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                script {
+                    // Clean-up steps (if necessary)
+                    echo 'Cleaning up...'
+                }
             }
         }
     }
 
     post {
+        always {
+            echo 'Pipeline finished.'
+        }
         success {
-            echo '✅ Application deployed successfully!'
+            echo 'Deployment was successful!'
         }
         failure {
-            echo '❌ Deployment failed!'
+            echo 'Deployment failed. Please check logs.'
         }
     }
 }
